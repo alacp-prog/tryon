@@ -12,6 +12,10 @@ export interface DetectionResult {
   coverage: number; // percentage 0-100
   bbox: BoundingBox | null;
   processingTimeMs?: number;
+  /** True only when the background was actually replaced (Remove.bg). */
+  backgroundRemoved: boolean;
+  /** False when on-device body detection is not available (web, outdated build). */
+  detectionAvailable: boolean;
 }
 
 export type BackgroundStyle = 'white' | 'lightGray' | 'original' | 'studioGradient';

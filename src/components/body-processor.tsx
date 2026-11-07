@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { View } from 'react-native';
 
 import { getApiKey, processLocally, processWithRemoveBg } from '@/services/body-segmenter';
 import { DetectionResult } from '@/types/body-detection';
@@ -13,6 +12,7 @@ interface BodyProcessorProps {
   onError: (error: string) => void;
 }
 
+/** Runs body detection (and Remove.bg when a key is set) whenever processing is requested. */
 export function BodyProcessor({
   imageUri,
   imageBase64,
@@ -29,25 +29,13 @@ export function BodyProcessor({
     const process = async () => {
       try {
         const apiKey = getApiKey();
-        let result: DetectionResult;
+        const result = apiKey
+          ? await processWithRemoveBg(imageBase64 || imageUri, apiKey, backgroundColor, imageUri)
+          : await processLocally(imageUri);
 
-        if (apiKey) {
-          result = await processWithRemoveBg(
-            imageBase64 || imageUri,
-            apiKey,
-            backgroundColor
-          );
-        } else {
-          result = await processLocally(imageUri, backgroundColor);
-        }
-
-        if (isMounted) {
-          onResult(result);
-        }
+        if (isMounted) onResult(result);
       } catch (err: unknown) {
-        if (isMounted) {
-          onError(err instanceof Error ? err.message : String(err));
-        }
+        if (isMounted) onError(err instanceof Error ? err.message : String(err));
       }
     };
 
@@ -58,5 +46,5 @@ export function BodyProcessor({
     };
   }, [isProcessing, imageUri, imageBase64, backgroundColor, onResult, onError]);
 
-  return <View style={{ display: 'none' }} />;
+  return null;
 }

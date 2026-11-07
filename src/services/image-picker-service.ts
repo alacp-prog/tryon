@@ -136,8 +136,9 @@ export async function shareImage(uri: string): Promise<void> {
       Alert.alert('Partage indisponible', 'Le partage n\'est pas supporté sur cet appareil.');
       return;
     }
-    await Sharing.shareAsync(uri);
+    const { ensureLocalFile } = await import('@/services/local-file');
+    await Sharing.shareAsync(await ensureLocalFile(uri, 'studio-export'));
   } catch {
-    Alert.alert('Enregistrement', 'Image prête et sauvegardée.');
+    Alert.alert('Partage impossible', 'L’image n’a pas pu être préparée pour le partage.');
   }
 }

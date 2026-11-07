@@ -44,11 +44,23 @@
           "photosPermission": "L'application a besoin d'accéder à vos photos."
         }
       ],
-      "expo-sharing"
+      "expo-sharing",
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "owner": "try-on",
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "e452df46-b596-4d63-951f-8e93b6172da5"
+      }
     }
   }
 }
